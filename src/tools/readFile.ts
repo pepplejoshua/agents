@@ -28,7 +28,10 @@ export const readFileExecutor: ToolExecutor = {
   async execute(params: ReadFileParams): Promise<any> {
     try {
       const content = await fs.readFile(params.path, "utf-8");
-      return { content };
+      const lines = content.split("\n");
+      const numberedLines = lines.map((line, index) => `${index + 1}: ${line}`);
+      const numberedContent = numberedLines.join("\n");
+      return { content: numberedContent };
     } catch (error) {
       if (error instanceof Error) {
         return { error: `Error reading file: ${error.message}` };
