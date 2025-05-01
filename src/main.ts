@@ -1,6 +1,7 @@
 import { Agent } from "./agent";
 import * as dotenv from "dotenv";
 import { readFileDefinition, readFileExecutor } from "./tools/readFile";
+import { listFilesDefinition, listFilesExecutor } from "./tools/listFiles";
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ if (!apiKey) {
 
 const agent = new Agent(apiKey, [
   { definition: readFileDefinition, executor: readFileExecutor },
+  { definition: listFilesDefinition, executor: listFilesExecutor },
 ]);
 
 agent.run().catch((error) => {
