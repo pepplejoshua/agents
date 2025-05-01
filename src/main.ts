@@ -1,5 +1,6 @@
 import { Agent } from "./agent";
 import * as dotenv from "dotenv";
+import { readFileDefinition, readFileExecutor } from "./tools/readFile";
 
 dotenv.config();
 
@@ -9,7 +10,9 @@ if (!apiKey) {
   process.exit(1);
 }
 
-const agent = new Agent(apiKey);
+const agent = new Agent(apiKey, [
+  { definition: readFileDefinition, executor: readFileExecutor },
+]);
 
 agent.run().catch((error) => {
   console.error("Error:", error);

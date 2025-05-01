@@ -1,8 +1,11 @@
-export interface Tool {
+import { FunctionDeclaration } from "@google/generative-ai";
+
+export interface ToolExecutor {
   name: string;
-  description: string;
-  execute: (params: any) => Promise<string>;
+  execute: (params: any) => Promise<any>;
 }
+
+export type ToolDefinition = FunctionDeclaration;
 
 export interface Message {
   role: "user" | "model";
