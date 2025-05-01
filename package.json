@@ -2,7 +2,10 @@
   "name": "agents",
   "version": "1.0.0",
   "description": "First foray into writing an Agent",
-  "main": "index.js",
+  "main": "dist/main.js",
+  "bin": {
+    "rho": "dist/main.js"
+  },
   "scripts": {
     "start": "ts-node src/main.ts",
     "build": "tsc",

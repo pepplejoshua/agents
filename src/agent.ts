@@ -78,7 +78,7 @@ export class Agent {
     `;
     console.log(logoText);
     console.log(
-      `    ${colors.dim}Type your questions or requests about this codebase.${colors.reset}`,
+      `    ${colors.dim}Type your questions or requests about the code in this directory.${colors.reset}`,
     );
     console.log(
       `    ${colors.dim}Use ${colors.bright}ctrl+c${colors.reset}${colors.dim} to exit.${colors.reset}`,
@@ -99,14 +99,14 @@ export class Agent {
   }
 
   private formatToolCall(name: string, args: any): string {
-    return `${colors.green}${colors.bright}🔧 TOOL${colors.reset} ${colors.white}${colors.bgGreen}${colors.bright} ${name} ${colors.reset}(${JSON.stringify(args, null, 2)})`;
+    return `${colors.green}${colors.bright}🔧 TOOL${colors.reset} ${colors.white}${colors.bgGreen}${colors.bright} ${name} ${colors.reset} ${JSON.stringify(args)}`;
   }
 
   private formatModelResponse(text: string): string {
     return `${colors.yellow}${colors.bright}ρ${colors.reset}: ${text}`;
   }
 
-  async run() {
+  async run(cwd = process.cwd()) {
     // Create model with tools
     const model = this.genAi.getGenerativeModel({
       model: "gemini-2.0-flash",
@@ -134,19 +134,24 @@ export class Agent {
       ],
     });
 
-    // Simple system prompt
+    // System prompt
     const rhoSysPrompt = `You are a code-focused AI assistant called Rho (ρ) running in the terminal.
     PRIMARY PURPOSE: You help users understand and modify codebases.
 
     IMPORTANT INSTRUCTIONS:
     1. Be concise and direct - users are in a terminal context.
     2. Proactively use your tools to explore the codebase when asked about code.
-    3. When asked about this project, IMMEDIATELY use list_files and read_file tools to explore it.
+    3. When asked about this project initially, IMMEDIATELY use list_files and read_file tools to explore it.
+       - Cover as much code surface area in this case in order to answer questions.
+       - When you are in exploration mode, be concise in intermediate messages and focus on the tool use for information gathering.
     4. When asked to make changes, confidently use the edit_file tool.
     5. When asked to create new files, use edit_file with empty old_str.
-    6. Use Markdown only when explicitly requested.
+    6. DO NOT USE Markdown unless explicitly requested by the user.
+       - When you are providing steps, DO NOT USE MARKDOWN.
+       - DO NOT USE Markdown in lists. You can write the list.
+       - Write simple text with unix terminal escape codes instead.
     7. For basic greetings or non-code questions, don't use tools.
-    8. Your job is code assistance - focus on that.
+    8. Your job is code assistance - focus on that. Be helpful.
 
     You have these tools:
     ${this.toolDefinitions
