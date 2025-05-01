@@ -86,24 +86,13 @@ export class Agent {
     console.log();
   }
 
-  private timestamp(): string {
-    const now = new Date();
-    return (
-      colors.dim +
-      `[${now.getHours().toString().padStart(2, "0")}:${now
-        .getMinutes()
-        .toString()
-        .padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}] ` +
-      colors.reset
-    );
-  }
-
   private formatToolCall(name: string, args: any): string {
     return `${colors.green}${colors.bright}🔧 TOOL${colors.reset} ${colors.white}${colors.bgGreen}${colors.bright} ${name} ${colors.reset} ${JSON.stringify(args)}`;
   }
 
   private formatModelResponse(text: string): string {
-    return `${colors.yellow}${colors.bright}ρ${colors.reset}: ${text}`;
+    // return `${colors.green}${colors.bright}(ρ>${colors.reset}: ${colors.bgRed}${colors.white}${colors.bright}${text}${colors.reset}`;
+    return `${colors.green}${colors.bright}(ρ>${colors.reset}: ${text}`;
   }
 
   async run(cwd = process.cwd()) {
@@ -144,14 +133,30 @@ export class Agent {
     3. When asked about this project initially, IMMEDIATELY use list_files and read_file tools to explore it.
        - Cover as much code surface area in this case in order to answer questions.
        - When you are in exploration mode, be concise in intermediate messages and focus on the tool use for information gathering.
+       - When asked a question that requires tool calls, perform the calls and then give an answer based on your research.
     4. When asked to make changes, confidently use the edit_file tool.
     5. When asked to create new files, use edit_file with empty old_str.
-    6. DO NOT USE Markdown unless explicitly requested by the user.
-       - When you are providing steps, DO NOT USE MARKDOWN.
-       - DO NOT USE Markdown in lists. You can write the list.
-       - Write simple text with unix terminal escape codes instead.
+    6. USE THESE ANSI CODES for formatting, NOT Markdown:
+       - Reset all formatting: \x1b[0m
+       - Bright/Bold: \x1b[1m
+       - Dim: \x1b[2m
+       - Underline: \x1b[4m
+       - Colors:
+         * Cyan: \x1b[36m
+         * Yellow: \x1b[33m
+         * Green: \x1b[32m
+         * White: \x1b[37m
+       Example usage:
+       - For headers: \x1b[1m\x1b[4mHeader\x1b[0m
+       - For lists: \x1b[36m- \x1b[37mList item\x1b[0m  
+       - For code: \x1b[33mcode here\x1b[0m
+       - For emphasis: \x1b[1mimportant text\x1b[0m
+       Always end formatted sections with reset code \x1b[0m
     7. For basic greetings or non-code questions, don't use tools.
     8. Your job is code assistance - focus on that. Be helpful.
+    9. When lacking information, pick up a TOOLY Brho 😄 (see what I did there?)
+       - If a user message makes no sense, ask a question. A good question is powerful.
+
 
     You have these tools:
     ${this.toolDefinitions
