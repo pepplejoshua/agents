@@ -1,0 +1,22 @@
+{
+  "name": "agents",
+  "version": "1.0.0",
+  "description": "First foray into writing an Agent",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/main.ts",
+    "build": "tsc",
+    "dev": "ts-node-dev --respawn src/main.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@types/node": "^22.15.3",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2"
+  }
+}
