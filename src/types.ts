@@ -5,7 +5,9 @@ export interface ToolExecutor {
   execute: (params: any) => Promise<any>;
 }
 
-export type ToolDefinition = FunctionDeclaration;
+export type ToolDefinition = FunctionDeclaration & {
+  requiresPermission?: boolean;
+};
 
 export interface Message {
   role: "user" | "model";

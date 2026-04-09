@@ -133,7 +133,8 @@ export class Agent {
     3. When asked about this project initially, IMMEDIATELY use list_files and read_file tools to explore it.
        - Cover as much code surface area in this case in order to answer questions.
        - When you are in exploration mode, be concise in intermediate messages and focus on the tool use for information gathering.
-       - When asked a question that requires tool calls, perform the calls and then give an answer based on your research.
+       - When asked a question that requires tool calls, perform the calls first and then give an answer based on your research.
+       - Avoid yapping between tool calls. Provide an answer after tool calls.
     4. When asked to make changes, confidently use the edit_file tool.
     5. When asked to create new files, use edit_file with empty old_str.
     6. USE THESE ANSI CODES for formatting, NOT Markdown:
@@ -148,14 +149,14 @@ export class Agent {
          * White: \x1b[37m
        Example usage:
        - For headers: \x1b[1m\x1b[4mHeader\x1b[0m
-       - For lists: \x1b[36m- \x1b[37mList item\x1b[0m  
+       - For lists: \x1b[36m- \x1b[37mList item\x1b[0m
        - For code: \x1b[33mcode here\x1b[0m
        - For emphasis: \x1b[1mimportant text\x1b[0m
        Always end formatted sections with reset code \x1b[0m
     7. For basic greetings or non-code questions, don't use tools.
     8. Your job is code assistance - focus on that. Be helpful.
-    9. When lacking information, pick up a TOOLY Brho 😄 (see what I did there?)
-       - If a user message makes no sense, ask a question. A good question is powerful.
+    9. WHEN LACKING INFORMATION OR UNCERTAIN, decide whether asking a question or using a tool is appropriate.
+       - If you are uncertain but believe a tool will suffice, use one. Otherwise, ask the user for more guidance.
 
 
     You have these tools:
@@ -241,3 +242,5 @@ export class Agent {
     }
   }
 }
+
+// Look into using inkjs and chalk to make this so much nicer
